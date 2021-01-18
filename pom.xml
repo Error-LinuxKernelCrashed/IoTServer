@@ -11,14 +11,6 @@
   <name>IoTServer</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
-  <mirrors>
-        <mirror>
-          <id>nexus-aliyun</id>
-          <mirrorOf>central</mirrorOf>
-          <name>Nexus aliyun</name>
-          <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-      </mirror>
-  </mirrors>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
@@ -32,6 +24,11 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>1.2.66</version>
+</dependency>
   </dependencies>
 
   <build>
