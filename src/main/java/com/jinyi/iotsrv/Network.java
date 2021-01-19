@@ -4,9 +4,7 @@ import com.alibaba.fastjson.*;
 import java.net.ServerSocket;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.net.Socket;
-import java.util.Set;
 public class Network {
     ServerSocket srvSocket;
     public Network(int port){
@@ -58,13 +56,37 @@ public class Network {
             if(rcevString != ""){
                 JSONObject msgJsonObject = JSONObject.parseObject(rcevString);
                 // Convert String into JSON Object
-                String ackTypeString = msgJsonObject.getString("ackType");
-                switch (ackTypeString){
-                    // TODO:在此添加消息响应
-                    default: System.out.println("非法请求");
+                String deviceTypeString = msgJsonObject.getString("DeviceType");
+                switch (deviceTypeString){
+                    case "Lock": {
+                        LockMsgHandler msgHandler = new LockMsgHandler(socket, msgJsonObject);
+                        msgHandler.ProcessRequest();
+                    }
+                    default: System.out.println("未知设备类型");
                 }
             } else {
                 System.out.println("非法请求");
+            }
+        }
+        class LockMsgHandler{
+            String msgString;
+            Socket clientSocket;
+            public LockMsgHandler(Socket client, JSONObject msgJsonObj){
+                JSONObject srvMsgObject = new JSONObject();
+                srvMsgObject.put("DeviceType", "Server");
+                String msgType = msgJsonObj.getString("AckType");
+                switch(msgType){
+                    case "HandShake":{
+                        // 握手处理
+                        srvMsgObject.put("AckType", "Handshake");
+                        srvMsgObject.put("Msg", "SrvHandShake");
+                    }
+                    default: System.out.println("来自智能门锁的未知请求，请尝试更新本程序");
+                }
+                msgString = srvMsgObject.toJSONString();
+            }
+            public void ProcessRequest(){
+
             }
         }
     }
